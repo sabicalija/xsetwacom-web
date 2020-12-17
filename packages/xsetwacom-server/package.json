@@ -1,0 +1,28 @@
+{
+  "name": "xsetwacom-server",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Alija Sabic <sabic.alija@gmail.com>",
+  "homepage": "https://github.com/sabicalija/xsetwacom-web#readme",
+  "license": "ISC",
+  "main": "lib/xsetwacom-server.js",
+  "directories": {},
+  "files": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabicalija/xsetwacom-web.git"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "bugs": {
+    "url": "https://github.com/sabicalija/xsetwacom-web/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
