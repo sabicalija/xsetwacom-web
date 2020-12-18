@@ -1,26 +1,23 @@
 <template>
   <div v-if="device">
     <h1>{{ device.name }}</h1>
-    <DeviceOptions :options="device.options" />
+    <MapToOutput />
+    <DeviceOptions :id="this.$attrs.id" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
+import MapToOutput from "@/components/MapToOutput.vue";
 import DeviceOptions from "@/components/DeviceOptions.vue";
 export default {
   name: "Device",
-  components: { DeviceOptions },
-  data() {
-    return {
-      device: null,
-    };
-  },
+  components: { MapToOutput, DeviceOptions },
   computed: {
-    ...mapGetters(["getDevice"]),
-  },
-  mounted() {
-    this.device = this.getDevice(this.$attrs.id);
+    ...mapState(["devices"]),
+    device() {
+      return this.devices.find(({ id }) => id === this.$attrs.id);
+    },
   },
 };
 </script>

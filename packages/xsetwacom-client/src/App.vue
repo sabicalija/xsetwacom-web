@@ -8,6 +8,20 @@
   </div>
 </template>
 
+<script>
+import { mapActions } from "vuex";
+export default {
+  methods: {
+    ...mapActions(["getDevices", "getScreens", "getDisplays"]),
+  },
+  async mounted() {
+    await this.getDevices();
+    await this.getScreens();
+    await this.getDisplays();
+  },
+};
+</script>
+
 <style lang="stylus" scoped>
 @import "~@/style/palette.styl";
 #app

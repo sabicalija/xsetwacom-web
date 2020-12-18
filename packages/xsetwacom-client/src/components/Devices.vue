@@ -27,7 +27,7 @@ ul
   list-style-type none
   padding-left unset
   width fit-content
+  margin auto
   display flex
   flex-flow column nowrap
-  margin 1rem auto
 </style>

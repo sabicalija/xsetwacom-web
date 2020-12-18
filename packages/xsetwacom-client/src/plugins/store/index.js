@@ -7,7 +7,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
+    ready: true,
     devices: [],
+    screens: [],
+    displays: [],
   },
   getters: {
     getDevice: (state) => (id) => {
@@ -25,20 +28,48 @@ export default new Vuex.Store({
     SET_DEVICE_OPTIONS(state, { id, options }) {
       state.devices.find((device) => device.id === id).options = options;
     },
+    SET_SCREENS(state, screens) {
+      state.screens = screens;
+    },
+    SET_DISPLAYS(state, displays) {
+      state.displays = displays;
+    },
+    START_REQUEST(state) {
+      state.ready = false;
+    },
+    FINISH_REQUEST(state) {
+      state.ready = true;
+    },
   },
   actions: {
     async getDevices({ commit, state, dispatch }) {
+      commit("START_REQUEST");
       const response = await axios.get("http://localhost:8080/devices/all");
       commit("SET_DEVICES", response.data);
       for (const device of state.devices) {
-        dispatch("getDeviceStatus", device.id);
+        await dispatch("getDeviceOptions", device.id);
       }
+      commit("FINISH_REQUEST");
     },
-    async getDeviceStatus({ commit }, id) {
+    async getDeviceOptions({ commit }, id) {
       const response = await axios.get(
         `http://localhost:8080/devices/${id}/overview`
       );
       commit("SET_DEVICE_OPTIONS", { id, options: response.data });
+    },
+    async getScreens({ commit }) {
+      commit("START_REQUEST");
+      const response = await axios.get("http://localhost:8080/screens/all");
+      commit("SET_SCREENS", response.data);
+      commit("FINISH_REQUEST");
+    },
+    async getDisplays({ commit }) {
+      commit("START_REQUEST");
+      const response = await axios.get(
+        "http://localhost:8080/screens/monitors"
+      );
+      commit("SET_DISPLAYS", response.data);
+      commit("FINISH_REQUEST");
     },
   },
   modules: {},

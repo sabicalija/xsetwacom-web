@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <li>
     <label :for="`option-${name}`">{{ name }}</label>
     <span :id="`option-${name}`">{{ value }} </span>
-  </div>
+  </li>
 </template>
 
 <script>
@@ -21,4 +21,11 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+li
+  display flex
+  flex-flow row nowrap
+  justify-content space-between
+  & > *
+    padding 0.5rem 1rem
+</style>
