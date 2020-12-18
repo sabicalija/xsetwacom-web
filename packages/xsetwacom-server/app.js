@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const generalRoutes = require("./routes/general.js");
+const screenRoutes = require("./routes/screen.js");
 const deviceRoutes = require("./routes/device.js");
+const generalRoutes = require("./routes/general.js");
 const app = express();
 
 app.use(bodyParser.json());
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use("/devices", deviceRoutes);
+app.use("/screens", screenRoutes);
 app.use("", generalRoutes);
 
 app.listen(8080);
