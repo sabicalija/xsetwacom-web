@@ -9,6 +9,12 @@ const getDeviceOverview = async (req, res, next) => {
   res.status(200).json(await getDeviceData(req.params));
 };
 
+const mapToOutput = async (req, res, next) => {
+  const id = req.body.id;
+  const output = req.body.output;
+  res.status(200).json(await mapOutput({ id, output }));
+};
+
 async function getAllDevices() {
   let result = [];
   try {
@@ -44,4 +50,13 @@ async function getDeviceData({ id }) {
   return result;
 }
 
-module.exports = { getAll, getDeviceOverview };
+async function mapOutput({ id, output }) {
+  let display = false;
+  try {
+    await exec(`xsetwacom --set ${id} MapToOutput ${output}`);
+    display = output;
+  } catch {}
+  return { option: "MapToOutput", id: Number(id), output: display };
+}
+
+module.exports = { getAll, getDeviceOverview, mapToOutput };

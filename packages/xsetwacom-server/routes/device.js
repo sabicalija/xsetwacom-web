@@ -5,5 +5,6 @@ const router = Router();
 
 router.get("/all", deviceController.getAll);
 router.get("/:id/overview", deviceController.getDeviceOverview);
+router.put("/:id/MapToOutput/", deviceController.mapToOutput);
 
 module.exports = router;
