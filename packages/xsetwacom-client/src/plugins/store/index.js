@@ -20,19 +20,28 @@ export default new Vuex.Store({
       const device = state.devices.find((device) => device.id === id);
       return device ? device.options : [];
     },
+    getMapOutput: (state) => (id) => {
+      const device = state.devices.find((device) => device.id === id);
+      return device ? device.output : "";
+    },
   },
   mutations: {
     SET_DEVICES(state, devices) {
       state.devices = devices;
     },
     SET_DEVICE_OPTIONS(state, { id, options }) {
-      state.devices.find((device) => device.id === id).options = options;
+      const device = state.devices.find((device) => device.id === id);
+      if (device) device.options = options;
     },
     SET_SCREENS(state, screens) {
       state.screens = screens;
     },
     SET_DISPLAYS(state, displays) {
       state.displays = displays;
+    },
+    SET_ACTIVE_OUTPUT(state, { id, output }) {
+      const device = state.devices.find((device) => device.id === id);
+      if (device) device.output = output;
     },
     START_REQUEST(state) {
       state.ready = false;
@@ -69,6 +78,15 @@ export default new Vuex.Store({
         "http://localhost:8080/screens/monitors"
       );
       commit("SET_DISPLAYS", response.data);
+      commit("FINISH_REQUEST");
+    },
+    async mapToOutput({ commit }, { id, output }) {
+      commit("START_REQUEST");
+      const response = await axios.put(
+        `http://localhost:8080/devices/${id}/MapToOutput/`,
+        { id, output }
+      );
+      commit("SET_ACTIVE_OUTPUT", response.data);
       commit("FINISH_REQUEST");
     },
   },

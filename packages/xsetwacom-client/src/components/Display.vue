@@ -1,18 +1,22 @@
 <template>
   <li
     tabindex="0"
+    :class="{ active }"
     :style="{
       width: `${width / scale}px`,
       height: `${height / scale}px`,
       left: `${x / scale}px`,
       lineHeight: `${height / scale}px`,
     }"
+    @click="onClick"
+    @keydown.enter.space.prevent="onClick"
   >
     {{ name }}
   </li>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   name: "Display",
   props: {
@@ -53,10 +57,36 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      active: false,
+    };
+  },
   computed: {
+    ...mapState(["ready"]),
+    ...mapGetters(["getMapOutput"]),
     yOffset() {
       return this.data;
     },
+  },
+  methods: {
+    ...mapActions(["mapToOutput"]),
+    onClick() {
+      const { id } = this.$route.params;
+      this.mapToOutput({ id, output: this.head });
+    },
+    updateOutput() {
+      const { id } = this.$route.params;
+      this.active = this.getMapOutput(Number(id)) === this.head;
+    },
+  },
+  watch: {
+    ready() {
+      this.updateOutput();
+    },
+  },
+  mounted() {
+    this.updateOutput();
   },
 };
 </script>
@@ -74,5 +104,5 @@ li
     opacity 1
     z-index 10
     background-color darken(gray,10%)
-    outline 0.25rem solid lightgreen;
+    outline 0.25rem solid lightgreen
 </style>
