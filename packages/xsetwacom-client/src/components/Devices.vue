@@ -17,7 +17,7 @@ export default {
     ...mapActions(["getDevices"]),
   },
   mounted() {
-    this.getDevices();
+    if (this.devices.length === 0) this.getDevices();
   },
 };
 </script>

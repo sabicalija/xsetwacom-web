@@ -41,5 +41,5 @@ export default {
 div
   position relative
   box-shadow 1px 1px 3px 1px gray
-  margin 1rem auto
+  margin 0.25rem auto 0.5rem
 </style>

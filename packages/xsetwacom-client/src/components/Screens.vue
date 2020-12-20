@@ -43,5 +43,7 @@ ul
   margin auto
   top 0px
   &, & > li
-    position absolute
+    position relative
+    & > span
+      position absolute
 </style>

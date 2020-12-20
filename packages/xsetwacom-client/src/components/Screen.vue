@@ -1,17 +1,9 @@
 <template>
-  <li
-    tabindex="0"
-    :class="{ active }"
-    :style="{
-      width: `${width / scale}px`,
-      height: `${height / scale}px`,
-      top: `${(offset - height) / scale}px`,
-      lineHeight: `${height / scale}px`,
-    }"
-    @click="onClick"
-    @keydown.enter.space.prevent="onClick"
-  >
-    Screen {{ number }}
+  <li tabindex="0" @click="onClick" @keydown.enter.space.prevent="onClick">
+    <span :class="{ active }" :style="style"> Screen {{ number }} </span>
+    <ul v-if="multi" class="devices">
+      <li v-for="(device, index) of setDevices" :key="index">{{ device }}</li>
+    </ul>
   </li>
 </template>
 
@@ -44,21 +36,45 @@ export default {
   data() {
     return {
       active: false,
+      setDevices: [],
     };
   },
   computed: {
-    ...mapState(["ready"]),
+    ...mapState(["ready", "devices"]),
     ...mapGetters(["getMapOutput"]),
+    multi() {
+      return typeof this.$route.params.id === "undefined";
+    },
+    style() {
+      return {
+        width: `${this.width / this.scale}px`,
+        height: `${this.height / this.scale}px`,
+        top: `${(this.offset - this.height) / this.scale}px`,
+        lineHeight: `${this.height / this.scale}px`,
+      };
+    },
   },
   methods: {
     ...mapActions(["mapToOutput"]),
-    onClick() {
+    async onClick() {
       const { id } = this.$route.params;
-      this.mapToOutput({ id, output: "desktop" });
+      if (id) this.mapToOutput({ id, output: "desktop" });
+      else {
+        for (const id of this.devices.map(({ id }) => id)) {
+          await this.mapToOutput({ id, output: "desktop" });
+        }
+      }
+    },
+    loadSetDevices() {
+      this.active = false;
+      this.setDevices = this.devices
+        .filter(({ output }) => output === "desktop")
+        .map(({ name }) => name);
     },
     updateOutput() {
       const { id } = this.$route.params;
-      this.active = this.getMapOutput(Number(id)) === "desktop";
+      if (id) this.active = this.getMapOutput(Number(id)) === "desktop";
+      else this.loadSetDevices();
     },
   },
   watch: {
@@ -69,13 +85,15 @@ export default {
   mounted() {
     this.updateOutput();
   },
+  created() {
+    this.updateOutput();
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
 @import "~@/style/palette.styl";
-
-li
+li span
   cursor pointer
   background-color lighten($accentColor, 30%)
   color white
@@ -85,5 +103,5 @@ li
   &:hover, &:focus
     z-index 20
     background-color lighten($accentColor, 10%)
-    outline 0.25rem solid lightgreen;
+    outline 0.25rem solid lightgreen
 </style>

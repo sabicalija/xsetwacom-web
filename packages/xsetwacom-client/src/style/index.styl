@@ -1,4 +1,23 @@
-li.active, li.active:focus, li.active:focus
-  opacity 1
-  outline 0.25rem solid lighten(blue,30%)
+li > span
+  &.active, &.active:focus, &.active:focus
+    opacity 1
+    outline 0.25rem solid lighten(blue,30%)
+    z-index 10
+
+ul.devices
+  list-style-type none
+  padding-left 0
+  display flex
+  flex-flow column nowrap
+  position absolute
+  bottom 0
+  padding-bottom 0.25rem
   z-index 10
+  li
+    color white
+    font-size 0.1rem
+    padding 0.01rem 0.3rem
+  &.display
+    display flex
+    flex-flow column nowrap
+    white-space nowrap
