@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/xsetwacom-server"
+		},
+		{
+			"path": "packages/xsetwacom-client"
+		}
+	],
+	"settings": {}
+}
